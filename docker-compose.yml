@@ -1,0 +1,39 @@
+version: '3'
+services:
+  mysql:
+    image: "mysql:5.7.22"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=phone
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=secret
+    ports:
+      - 3306:3306
+
+  app:
+    build: .
+    working_dir: /app
+    command: php artisan serve
+    ports:
+      - "8000:8000"
+    volumes:
+        - .:/app
+    environment:
+      - DB_HOST=mysql
+    depends_on:
+      - mysql
+
+  tests:
+    image: phpunit/phpunit
+    working_dir: /app
+    command: run
+    volumes:
+      - .:/app
+    depends_on:
+      - mysql
+
+  composer:
+    image: composer
+    command: install
+    volumes:
+      - .:/app

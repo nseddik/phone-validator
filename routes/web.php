@@ -11,6 +11,12 @@
 |
 */
 
+
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/phone', 'PhoneController@home')->name('displayPhoneForm');
+Route::post('/phone', 'PhoneController@submitPhone');
